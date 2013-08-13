@@ -1,4 +1,3 @@
-#!/bin/bash
 # Copyright 2013, Nathan Milford
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
