@@ -1,0 +1,80 @@
+#!/bin/bash
+# Copyright 2013, Nathan Milford
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# /etc/init.d/etcd
+#
+# Startup script for etcd
+#
+# chkconfig: 2345 20 80
+# description: Starts and stops etcd
+
+. /etc/init.d/functions
+
+prog="etcd"
+prog_bin="/usr/sbin/$prog"
+desc="etcd shared configuration and service discovery daemon"
+
+if ! [ -f $prog_bin ]; then
+  echo "$prog binary not found."
+  exit 5
+fi
+
+if [ -f /etc/sysconfig/$prog ]; then
+  . /etc/sysconfig/$prog
+else
+  echo "No sysconfig file found in /etc/sysconfig/$prog... exiting."
+  exit 5
+fi
+
+start() {
+  echo "Starting $desc ($prog): "
+  su $ETCD_USER -c "nohup $prog_bin $ETCD_OPTS -v >>$ETCD_OUT_FILE 2>&1 &"
+  RETVAL=$?
+  return $RETVAL
+}
+
+stop() {
+  echo "Shutting down $desc ($prog): "
+  pkill -f $prog_bin
+}
+
+restart() {
+    stop
+    start
+}
+
+status() {
+  if [ -z $pid ]; then
+     pid=$(pgrep -f $prog_bin)
+  fi
+
+  if [ -z $pid ]; then
+    echo "$prog is NOT running."
+    return 1
+  else
+    echo "$prog is running (pid is $pid)."
+  fi
+
+}
+
+case "$1" in
+  start)   start;;
+  stop)    stop;;
+  restart) restart;;
+  status)  status;;
+  *)       echo "Usage: $0 {start|stop|restart|status}"
+           RETVAL=2;;
+esac
+exit $RETVAL
