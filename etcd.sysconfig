@@ -90,5 +90,5 @@ if [ x$ETCD_CAFILE != "x" ] && [ x$ETCD_CERT != "x" ] && [ x$ETCD_KEY != "x" ]; 
 fi
 
 if [ x$RAFT_CAFILE != "x" ] && [ x$RAFT_CERT != "x" ] && [ x$RAFT_KEY != "x" ]; then
-  ETCD_OPTS="$ETCD_OPTS -clientCAFile=${RAFT_CAFILE} -clientCert=${RAFT_CERT} -clientKey=${RAFT_KEY}"
+  ETCD_OPTS="$ETCD_OPTS -serverCAFile=${RAFT_CAFILE} -serverCert=${RAFT_CERT} -serverKey=${RAFT_KEY}"
 fi
