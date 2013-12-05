@@ -17,7 +17,7 @@
 #
 # sudo yum -y install rpmdevtools go && rpmdev-setuptree
 # wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.spec -O ~/rpmbuild/SPECS/etcd.spec
-# wget https://github.com/coreos/etcd/releases/download/v0.1.0/etcd-v0.1.0-Linux.tar.gz -O ~/rpmbuild/SOURCES/etcd-v0.1.0-Linux.tar.gz
+# wget https://github.com/coreos/etcd/releases/download/v0.2.0-rc1/etcd-v0.2.0-rc1-Linux-x86_64.tar.gz -O ~/rpmbuild/SOURCES/etcd-v0.2.0-rc1-Linux-x86_64.tar.gz
 # wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.initd -O ~/rpmbuild/SOURCES/etcd.initd
 # wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.sysconfig -O ~/rpmbuild/SOURCES/etcd.sysconfig
 # wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.nofiles.conf -O ~/rpmbuild/SOURCES/etcd.nofiles.conf
@@ -29,13 +29,13 @@
 %define etcd_data  %{_localstatedir}/lib/%{name}
 
 Name:      etcd
-Version:   0.1.0
-Release:   1
+Version:   0.2.0
+Release:   rc1
 Summary:   A highly-available key value store for shared configuration and service discovery.
 License:   Apache 2.0
 URL:       https://github.com/coreos/etcd
 Group:     System Environment/Daemons
-Source0:   https://github.com/coreos/%{name}/releases/download/v%{version}/%{name}-v%{version}-Linux.tar.gz
+Source0:   https://github.com/coreos/%{name}/releases/download/v%{version}/%{name}-v%{version}-rc1-Linux-x86_64.tar.gz
 Source1:   %{name}.initd
 Source2:   %{name}.sysconfig
 Source3:   %{name}.nofiles.conf
@@ -46,8 +46,8 @@ Requires(pre): shadow-utils
 Requires(post): /sbin/chkconfig
 Requires(preun): /sbin/chkconfig, /sbin/service
 Requires(postun): /sbin/service
-BuildRequires: go >= 1.1
-Requires:      go >= 1.1
+BuildRequires: golang >= 1.1
+Requires:      golang >= 1.1
 
 %description
 A highly-available key value store for shared configuration and service
@@ -62,19 +62,21 @@ Etcd is written in Go and uses the raft consensus algorithm to manage a
 highly-available replicated log.
 
 %prep
-%setup -n %{name}-v%{version}
+%setup -n %{name}-v%{version}-rc1-Linux-x86_64
 
 %build
 rm -rf %{buildroot}
 
+echo  %{buildroot}
+
 %install
 install -d -m 755 %{buildroot}/%{_sbindir}
-install    -m 755 %{_builddir}/%{name}-v%{version}/etcd    %{buildroot}/%{_sbindir}
-install    -m 755 %{_builddir}/%{name}-v%{version}/etcdctl %{buildroot}/%{_sbindir}
+install    -m 755 %{_builddir}/%{name}-v%{version}-rc1-Linux-x86_64/etcd    %{buildroot}/%{_sbindir}
+install    -m 755 %{_builddir}/%{name}-v%{version}-rc1-Linux-x86_64/etcdctl %{buildroot}/%{_sbindir}
 
 install -d -m 755 %{buildroot}/usr/share/doc/%{name}-v%{version}
-install    -m 644 %{_builddir}/%{name}-v%{version}/README-etcd.md    %{buildroot}/%{_defaultdocdir}/%{name}-v%{version}
-install    -m 644 %{_builddir}/%{name}-v%{version}/README-etcdctl.md %{buildroot}/%{_defaultdocdir}/%{name}-v%{version}
+install    -m 644 %{_builddir}/%{name}-v%{version}-rc1-Linux-x86_64/README-etcd.md    %{buildroot}/%{_defaultdocdir}/%{name}-v%{version}
+install    -m 644 %{_builddir}/%{name}-v%{version}-rc1-Linux-x86_64/README-etcdctl.md %{buildroot}/%{_defaultdocdir}/%{name}-v%{version}
 
 install -d -m 755 %{buildroot}/%{_localstatedir}/log/%{name}
 install -d -m 755 %{buildroot}/%{_localstatedir}/lib/%{name}
@@ -119,5 +121,6 @@ fi
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 
 %changelog
+* Thu Dec 05 2013 Nathan Milford <nathan@milford.io> 0.2.0-rc1
 * Mon Aug 12 2013 Nathan Milford <nathan@milford.io> 0.1.0-1
 - Initial spec.
