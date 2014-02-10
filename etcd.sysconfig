@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2013, Nathan Milford
+# Copyright 2014, Nathan Milford
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Will be used to populate IP address values below.  Setting some items to
+# '0.0.0.0' is not compatable with the discovery API.
+_MY_IPADDR=$(/sbin/ifconfig | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -f2 | sort | awk '{print $1}')
+
 # Daemon User
 ETCD_USER="etcd"
 
@@ -21,11 +25,20 @@ ETCD_USER="etcd"
 #  you're playing with a single node.
 ETCD_SEEDS=""
 
+# Discovery Endpoint
+#  Leave it as the public URL unless you are running your own.
+ETCD_DISCOVER_ENDPOINT="https://discovery.etcd.io/"
+
+# Discovery Token
+#  If you are using the discovery protocol you can grab your cluster token
+#  from https://discovery.etcd.io/new if you are not hosting it yourself.
+ETCD_DISCOVERY_TOKEN=""
+
 # This node's name as it represents itself on the cluster.
 ETCD_NODE_NAME=$(hostname -s)
 
 # Hostname and port for the etcd server to work on.
-ETCD_LISTEN="0.0.0.0:4001"
+ETCD_LISTEN="$_MY_IPADDR:4001"
 
 # Directory to store log and snapshot.
 ETCD_DATA_DIR="/var/lib/etcd/"
@@ -58,7 +71,7 @@ ETCD_KEY=""
 ETCD_SNAPSHOT=""
 
 # Hostname and port for the RAFT server to work on.
-RAFT_LISTEN="0.0.0.0:7001"
+RAFT_LISTEN="$_MY_IPADDR:7001"
 
 # Set security settings for the RAFT server.
 #  Leave blank if you do not plan to use this feature, otherwise add appropriate
@@ -69,10 +82,20 @@ RAFT_KEY=""
 
 # Below we build the opts to pass to the init script.
 
-ETCD_OPTS="-n=${ETCD_NODE_NAME} -c=${ETCD_LISTEN} -s=${RAFT_LISTEN} -d=${ETCD_DATA_DIR} -m=${ETCD_MAXRESULT} -maxsize=${ETCD_MAXSIZE} -r=${ETCD_RETRIES}"
+ETCD_OPTS="-name=${ETCD_NODE_NAME} \
+          -addr=${ETCD_LISTEN} \
+          -peer-addr=${RAFT_LISTEN} \
+          -data-dir=${ETCD_DATA_DIR} \
+          -max-result-buffer=${ETCD_MAXRESULT} \
+          -max-cluster-size=${ETCD_MAXSIZE} \
+          -max-retry-attempts=${ETCD_RETRIES}"
 
 if [ x$ETCD_SEEDS != "x" ]; then
-  ETCD_OPTS="$ETCD_OPTS -C=${ETCD_SEEDS}"
+  ETCD_OPTS="$ETCD_OPTS -peers=${ETCD_SEEDS}"
+fi
+
+if [ x$ETCD_DISCOVERY_TOKEN != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS -discovery=${ETCD_DISCOVER_ENDPOINT}${ETCD_DISCOVERY_TOKEN}"
 fi
 
 if [ "$ETCD_LOGGING" == "v" ]; then
@@ -86,9 +109,16 @@ if [ x$ETCD_SNAPSHOT != "x" ]; then
 fi
 
 if [ x$ETCD_CAFILE != "x" ] && [ x$ETCD_CERT != "x" ] && [ x$ETCD_KEY != "x" ]; then
-  ETCD_OPTS="$ETCD_OPTS -clientCAFile=${ETCD_CAFILE} -clientCert=${ETCD_CERT} -clientKey=${ETCD_KEY}"
+  ETCD_OPTS="$ETCD_OPTS -ca-file=${ETCD_CAFILE} -cert-file=${ETCD_CERT} -key-file=${ETCD_KEY}"
 fi
 
 if [ x$RAFT_CAFILE != "x" ] && [ x$RAFT_CERT != "x" ] && [ x$RAFT_KEY != "x" ]; then
-  ETCD_OPTS="$ETCD_OPTS -serverCAFile=${RAFT_CAFILE} -serverCert=${RAFT_CERT} -serverKey=${RAFT_KEY}"
+  ETCD_OPTS="$ETCD_OPTS -peer-ca-file=${RAFT_CAFILE} -peer-cert-file=${RAFT_CERT} -peer-key-file=${RAFT_KEY}"
 fi
+
+# TODO
+# Add support for:
+#  -peers-file
+#  -config
+#  -cors 
+#  -cpuprofile
