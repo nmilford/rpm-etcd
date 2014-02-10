@@ -10,7 +10,7 @@ You will need go from http://repo.milford.io.
 
 `wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.spec -O ~/rpmbuild/SPECS/etcd.spec`
 
-`wget https://github.com/coreos/etcd/releases/download/v0.2.0/etcd-v0.2.0-Linux-x86_64.tar.gz -O ~/rpmbuild/SOURCES/etcd-v0.2.0-Linux-x86_64.tar.gz`
+`wget https://github.com/coreos/etcd/releases/download/v0.3.0/etcd-v0.3.0-linux-amd64.tar.gz -O ~/rpmbuild/SOURCES/etcd-v0.3.0-linux-amd64.tar.gz`
 
 `wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.initd -O ~/rpmbuild/SOURCES/etcd.initd`
 
