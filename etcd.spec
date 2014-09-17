@@ -17,7 +17,7 @@
 #
 # sudo yum -y install rpmdevtools go && rpmdev-setuptree
 # wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.spec -O ~/rpmbuild/SPECS/etcd.spec
-# wget https://github.com/coreos/etcd/releases/download/v0.3.0/etcd-v0.3.0-linux-amd64.tar.gz -O ~/rpmbuild/SOURCES/etcd-v0.3.0-linux-amd64.tar.gz
+# wget https://github.com/coreos/etcd/releases/download/v0.4.6/etcd-v0.4.6-linux-amd64.tar.gz -O ~/rpmbuild/SOURCES/etcd-v0.4.6-linux-amd64.tar.gz
 # wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.initd -O ~/rpmbuild/SOURCES/etcd.initd
 # wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.sysconfig -O ~/rpmbuild/SOURCES/etcd.sysconfig
 # wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.nofiles.conf -O ~/rpmbuild/SOURCES/etcd.nofiles.conf
@@ -30,7 +30,7 @@
 %define etcd_data  %{_localstatedir}/lib/%{name}
 
 Name:      etcd
-Version:   0.3.0
+Version:   0.4.6
 Release:   1
 Summary:   A highly-available key value store for shared configuration and service discovery.
 License:   Apache 2.0
@@ -122,6 +122,7 @@ fi
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 
 %changelog
+* Wed Sep 17 2014 Derek Douville <derekd@nodeprime.com> 0.4.6
 * Mon Feb 10 2014 Nathan Milford <nathan@milford.io> 0.3.0
 * Sat Dec 28 2013 Nathan Milford <nathan@milford.io> 0.2.0
 * Thu Dec 05 2013 Nathan Milford <nathan@milford.io> 0.2.0-rc1
