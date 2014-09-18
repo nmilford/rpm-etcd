@@ -13,9 +13,8 @@
 # limitations under the License.
 
 # To Install:
-# You will need go from http://repo.milford.io.
 #
-# sudo yum -y install rpmdevtools go && rpmdev-setuptree
+# sudo yum -y install rpmdevtools && rpmdev-setuptree
 # wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.spec -O ~/rpmbuild/SPECS/etcd.spec
 # wget https://github.com/coreos/etcd/releases/download/v0.4.6/etcd-v0.4.6-linux-amd64.tar.gz -O ~/rpmbuild/SOURCES/etcd-v0.4.6-linux-amd64.tar.gz
 # wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.initd -O ~/rpmbuild/SOURCES/etcd.initd
@@ -47,8 +46,6 @@ Requires(pre): shadow-utils
 Requires(post): /sbin/chkconfig
 Requires(preun): /sbin/chkconfig, /sbin/service
 Requires(postun): /sbin/service
-BuildRequires: golang >= 1.1
-Requires:      golang >= 1.1
 
 %description
 A highly-available key value store for shared configuration and service
@@ -122,6 +119,7 @@ fi
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 
 %changelog
+* Wed Sep 18 2014 Derek Douville <derekd@nodeprime.com> Remove golang, etcd is statically linked
 * Wed Sep 17 2014 Derek Douville <derekd@nodeprime.com> 0.4.6
 * Mon Feb 10 2014 Nathan Milford <nathan@milford.io> 0.3.0
 * Sat Dec 28 2013 Nathan Milford <nathan@milford.io> 0.2.0

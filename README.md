@@ -4,9 +4,8 @@ rpm-etcd
 An RPM spec file to build and install etcd.
 
 To Install:
-You will need go from http://repo.milford.io.
 
-`sudo yum -y install rpmdevtools go && rpmdev-setuptree`
+`sudo yum -y install rpmdevtools && rpmdev-setuptree`
 
 `wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.spec -O ~/rpmbuild/SPECS/etcd.spec`
 
