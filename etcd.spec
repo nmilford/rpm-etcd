@@ -119,7 +119,7 @@ fi
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 
 %changelog
-* Wed Sep 18 2014 Derek Douville <derekd@nodeprime.com> Remove golang, etcd is statically linked
+* Thu Sep 18 2014 Derek Douville <derekd@nodeprime.com> Remove golang, etcd is statically linked
 * Wed Sep 17 2014 Derek Douville <derekd@nodeprime.com> 0.4.6
 * Mon Feb 10 2014 Nathan Milford <nathan@milford.io> 0.3.0
 * Sat Dec 28 2013 Nathan Milford <nathan@milford.io> 0.2.0
