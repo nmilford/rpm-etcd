@@ -40,7 +40,7 @@ fi
 
 start() {
   echo "Starting $desc ($prog): "
-  su $ETCD_USER -c "nohup $prog_bin $ETCD_OPTS -v >>$ETCD_OUT_FILE 2>&1 &"
+  su $ETCD_USER -c "nohup $prog_bin $ETCD_OPTS >>$ETCD_OUT_FILE 2>&1 &"
   RETVAL=$?
   return $RETVAL
 }
