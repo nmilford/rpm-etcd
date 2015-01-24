@@ -29,6 +29,10 @@ ETCD_SEEDS=""
 #  Leave it as the public URL unless you are running your own.
 ETCD_DISCOVER_ENDPOINT="https://discovery.etcd.io/"
 
+# Specify a peer/leader to connect to upon start
+# example a hostname:7001
+ETCD_PEERS=""
+
 # Discovery Token
 #  If you are using the discovery protocol you can grab your cluster token
 #  from https://discovery.etcd.io/new if you are not hosting it yourself.
@@ -86,6 +90,7 @@ ETCD_OPTS="-name=${ETCD_NODE_NAME} \
           -addr=${ETCD_LISTEN} \
           -peer-addr=${RAFT_LISTEN} \
           -data-dir=${ETCD_DATA_DIR} \
+          -peers=${ETCD_PEERS} \
           -max-result-buffer=${ETCD_MAXRESULT} \
           -max-cluster-size=${ETCD_MAXSIZE} \
           -max-retry-attempts=${ETCD_RETRIES}"
