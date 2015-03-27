@@ -16,7 +16,7 @@
 #
 # sudo yum -y install rpmdevtools && rpmdev-setuptree
 # wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.spec -O ~/rpmbuild/SPECS/etcd.spec
-# wget https://github.com/coreos/etcd/releases/download/v0.4.6/etcd-v0.4.6-linux-amd64.tar.gz -O ~/rpmbuild/SOURCES/etcd-v0.4.6-linux-amd64.tar.gz
+# wget https://github.com/coreos/etcd/releases/download/v2.0.5/etcd-v2.0.5-linux-amd64.tar.gz -O ~/rpmbuild/SOURCES/etcd-v2.0.5-linux-amd64.tar.gz
 # wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.initd -O ~/rpmbuild/SOURCES/etcd.initd
 # wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.sysconfig -O ~/rpmbuild/SOURCES/etcd.sysconfig
 # wget https://raw.github.com/nmilford/rpm-etcd/master/etcd.nofiles.conf -O ~/rpmbuild/SOURCES/etcd.nofiles.conf
@@ -29,7 +29,7 @@
 %define etcd_data  %{_localstatedir}/lib/%{name}
 
 Name:      etcd
-Version:   0.4.6
+Version:   2.0.5
 Release:   1
 Summary:   A highly-available key value store for shared configuration and service discovery.
 License:   Apache 2.0
@@ -73,7 +73,7 @@ install    -m 755 %{_builddir}/%{name}-v%{version}-linux-amd64/etcd    %{buildro
 install    -m 755 %{_builddir}/%{name}-v%{version}-linux-amd64/etcdctl %{buildroot}/%{_sbindir}
 
 install -d -m 755 %{buildroot}/usr/share/doc/%{name}-v%{version}
-install    -m 644 %{_builddir}/%{name}-v%{version}-linux-amd64/README-etcd.md    %{buildroot}/%{_defaultdocdir}/%{name}-v%{version}
+install    -m 644 %{_builddir}/%{name}-v%{version}-linux-amd64/README.md    %{buildroot}/%{_defaultdocdir}/%{name}-v%{version}
 install    -m 644 %{_builddir}/%{name}-v%{version}-linux-amd64/README-etcdctl.md %{buildroot}/%{_defaultdocdir}/%{name}-v%{version}
 
 install -d -m 755 %{buildroot}/%{_localstatedir}/log/%{name}
@@ -119,6 +119,7 @@ fi
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 
 %changelog
+* Tue Mar 17 2015 Marco Lebbink <marco@lebbink.net> 2.0.5 
 * Thu Sep 18 2014 Derek Douville <derekd@nodeprime.com> Remove golang, etcd is statically linked
 * Wed Sep 17 2014 Derek Douville <derekd@nodeprime.com> 0.4.6
 * Mon Feb 10 2014 Nathan Milford <nathan@milford.io> 0.3.0
