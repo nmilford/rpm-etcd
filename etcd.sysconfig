@@ -41,7 +41,7 @@ ETCD_DISCOVERY_TOKEN=""
 ETCD_NODE_NAME=$(hostname -s)
 
 # Hostname and port for the etcd server to work on.
-ETCD_LISTEN="${ETCD_PROTOCOL}${_MY_IPADDR}:4001"
+ETCD_LISTEN="${ETCD_PROTOCOL}localhost:4001,${ETCD_PROTOCOL}${_MY_IPADDR}:4001"
 
 # Directory to store log and snapshot.
 ETCD_DATA_DIR="/var/lib/etcd/"
