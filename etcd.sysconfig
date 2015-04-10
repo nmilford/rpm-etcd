@@ -20,6 +20,9 @@ _MY_IPADDR=$(/sbin/ifconfig | grep 'inet addr:'| grep -v '127.0.0.1' | cut -d: -
 # Daemon User
 ETCD_USER="etcd"
 
+# Communication Protocol Identifier (http://|https://)
+ETCD_PROTOCOL="http://"
+
 # Cluster Seeds
 #  You can specify a list here sepearated by commas, or leave it blank if
 #  you're playing with a single node.
@@ -38,7 +41,7 @@ ETCD_DISCOVERY_TOKEN=""
 ETCD_NODE_NAME=$(hostname -s)
 
 # Hostname and port for the etcd server to work on.
-ETCD_LISTEN="$_MY_IPADDR:4001"
+ETCD_LISTEN="${ETCD_PROTOCOL}${_MY_IPADDR}:4001"
 
 # Directory to store log and snapshot.
 ETCD_DATA_DIR="/var/lib/etcd/"
@@ -62,7 +65,7 @@ ETCD_KEY=""
 ETCD_SNAPSHOT=""
 
 # Hostname and port for the RAFT server to work on.
-RAFT_LISTEN="$_MY_IPADDR:7001"
+RAFT_LISTEN="${ETCD_PROTOCOL}${_MY_IPADDR}:7001"
 
 # Set security settings for the RAFT server.
 #  Leave blank if you do not plan to use this feature, otherwise add appropriate
@@ -74,10 +77,10 @@ RAFT_KEY=""
 # Below we build the opts to pass to the init script.
 
 ETCD_OPTS="-name=${ETCD_NODE_NAME} \
-          -addr=${ETCD_LISTEN} \
-          -peer-addr=${RAFT_LISTEN} \
+          --listen-client-urls=${ETCD_LISTEN} \
+          --listen-peer-urls=${RAFT_LISTEN} \
           -data-dir=${ETCD_DATA_DIR}"
-              
+
 if [ x$ETCD_SEEDS != "x" ]; then
   ETCD_OPTS="$ETCD_OPTS -peers=${ETCD_SEEDS}"
 fi
