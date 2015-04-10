@@ -54,15 +54,6 @@ ETCD_OUT_FILE="/var/log/etcd/etcd.out"
 #   Valid options are "", "v" or "vv"
 ETCD_LOGGING=""
 
-# Max size of the cluster.
-ETCD_MAXSIZE=9
-
-# Max size of result buffer.
-ETCD_MAXRESULT=1024 
-
-# Number of retries to attempt while joining a cluster
-ETCD_RETRIES=3
-
 # Set security settings for the etcd server.
 #  Leave blank if you do not plan to use this feature, otherwise add appropriate
 #  paths.
@@ -90,11 +81,8 @@ ETCD_OPTS="-name=${ETCD_NODE_NAME} \
           -addr=${ETCD_LISTEN} \
           -peer-addr=${RAFT_LISTEN} \
           -data-dir=${ETCD_DATA_DIR} \
-          -peers=${ETCD_PEERS} \
-          -max-result-buffer=${ETCD_MAXRESULT} \
-          -max-cluster-size=${ETCD_MAXSIZE} \
-          -max-retry-attempts=${ETCD_RETRIES}"
-
+          -peers=${ETCD_PEERS}"
+        
 if [ x$ETCD_SEEDS != "x" ]; then
   ETCD_OPTS="$ETCD_OPTS -peers=${ETCD_SEEDS}"
 fi
