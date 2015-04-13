@@ -37,6 +37,11 @@ ETCD_DISCOVER_ENDPOINT="https://discovery.etcd.io/"
 #  from https://discovery.etcd.io/new if you are not hosting it yourself.
 ETCD_DISCOVERY_TOKEN=""
 
+# Discovery using SRV DNS Records
+#  Configure the domain that serves the etcd cluster SRV records _etcd-server._tcp
+#  and/or _etcd-server-https._tcp
+ETCD_DISCOVERY_SRV_DOMAIN=""
+
 # This node's name as it represents itself on the cluster.
 ETCD_NODE_NAME=$(hostname -s)
 
@@ -87,6 +92,8 @@ fi
 
 if [ x$ETCD_DISCOVERY_TOKEN != "x" ]; then
   ETCD_OPTS="$ETCD_OPTS -discovery=${ETCD_DISCOVER_ENDPOINT}${ETCD_DISCOVERY_TOKEN}"
+elif [ x$ETCD_DISCOVERY_SRV_DOMAIN != "x" ]; then
+  ETCD_OPTS="$ETCD_OPTS --discovery-srv=${ETCD_DISCOVERY_SRV_DOMAIN}"
 fi
 
 if [ "$ETCD_LOGGING" == "v" ]; then
